@@ -28,20 +28,18 @@ export default function LoginScreen() {
         <Text style={styles.subtitle}>Sign in to continue</Text>
 
         <AppInput
-          label="Email"
+          label="Email Address"
           placeholder="Enter your email"
-          value={email}
-          onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+          leftIcon="mail"
         />
 
         <AppInput
           label="Password"
           placeholder="Enter your password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
+          leftIcon="lock-closed"
+          isPassword
         />
 
         <Pressable>
@@ -117,4 +115,3 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
- 

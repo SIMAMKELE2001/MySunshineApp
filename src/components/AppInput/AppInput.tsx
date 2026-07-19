@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -8,21 +9,51 @@ import {
 } from "react-native";
 
 import { Colors, Radius, Spacing, Typography } from "../../theme";
+import { Ionicons } from "@expo/vector-icons";
 
 type AppInputProps = TextInputProps & {
   label: string;
+  leftIcon?: keyof typeof Ionicons.glyphMap;
+  isPassword?: boolean;
 };
 
-export default function AppInput({ label, ...props }: AppInputProps) {
+export default function AppInput({
+  label,
+  leftIcon,
+  isPassword = false,
+   ...props
+}: AppInputProps) {
+  const [hidePassword, setHidePassword] = useState(isPassword);
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholderTextColor={Colors.textSecondary}
-        {...props}
-      />
+      <View style={styles.inputContainer}>
+        {leftIcon && (
+          <Ionicons
+            name={leftIcon}
+            size={22}
+            color={Colors.textSecondary}
+            style={styles.icon}
+          />
+        )}
+
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={Colors.textSecondary}
+          secureTextEntry={hidePassword}
+          {...props}
+        />
+        {isPassword && (
+          <Pressable onPress={() => setHidePassword(!hidePassword)}>
+            <Ionicons
+              name={hidePassword ? "eye-off" : "eye"}
+              size={22}
+              color={Colors.textSecondary}
+            />
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 }
@@ -40,13 +71,25 @@ const styles = StyleSheet.create({
   },
 
   input: {
+    flex: 1,
+    fontSize: Typography.body,
+    color: Colors.textPrimary,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+
     borderWidth: 1,
     borderColor: Colors.primary,
+
     borderRadius: Radius.md,
+
+    backgroundColor: Colors.white,
+
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
-    fontSize: Typography.body,
-    backgroundColor: Colors.white,
-    color: Colors.textPrimary,
+  },
+  icon: {
+    marginRight: Spacing.sm,
   },
 });
